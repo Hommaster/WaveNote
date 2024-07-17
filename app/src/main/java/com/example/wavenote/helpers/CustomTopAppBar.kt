@@ -45,7 +45,6 @@ fun CustomAppBar(
     navController: NavController,
     onClick: () -> Unit
 ) {
-    val navigate = rememberNavController()
     TopAppBar(
         modifier = Modifier
             .clip(RoundedCornerShape(0.dp, 0.dp, 13.dp, 13.dp))
