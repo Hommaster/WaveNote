@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.wavenote.routes.Routes
 import com.example.wavenote.screens.calendar.CalendarApp
+import com.example.wavenote.screens.calendar.CalendarViewModel
 import com.example.wavenote.screens.mainScreen.MainScreen
 import com.example.wavenote.ui.theme.WaveNoteTheme
 
@@ -40,7 +41,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Routes.Calendar.route){
-                        CalendarApp()
+                        CalendarApp(viewModel = CalendarViewModel())
                     }
                 }
             }
