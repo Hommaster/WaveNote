@@ -19,7 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wavenote.R
 import com.example.wavenote.helpers.CustomAppBar
-import com.example.wavenote.screens.mainScreen.helper.PulsarFab
+import com.example.wavenote.helpers.PulsarFab
 import kotlinx.coroutines.launch
 
 @Preview
