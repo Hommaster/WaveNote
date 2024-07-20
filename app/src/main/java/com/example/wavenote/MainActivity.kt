@@ -41,7 +41,10 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Routes.Calendar.route){
-                        CalendarApp(viewModel = CalendarViewModel())
+                        CalendarApp(
+                            viewModel = CalendarViewModel(),
+                            navController = navController
+                        )
                     }
                 }
             }
