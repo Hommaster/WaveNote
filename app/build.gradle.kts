@@ -73,4 +73,6 @@ dependencies {
     debugImplementation(libs.leackcanary)
     implementation(libs.navigation.compose)
     implementation(kotlin("script-runtime"))
+
+    implementation(libs.compose)
 }
