@@ -1,5 +1,6 @@
-package com.example.wavenote.screens.mainScreen.helper
+package com.example.wavenote.helpers
 
+import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.animation.core.RepeatMode.Restart
 import androidx.compose.foundation.Canvas
@@ -17,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.example.wavenote.R
@@ -47,7 +47,7 @@ fun PulsarFab(
 
 @Composable
 fun MultiplePulsarEffect(
-    nbPulsar: Int = 2,
+    nbPulsar: Int = 3,
     pulsarRadius: Float = 13f,
     pulsarColor: Color = colorResource(id = R.color.orange),
     fab: @Composable (Modifier) -> Unit = {}
