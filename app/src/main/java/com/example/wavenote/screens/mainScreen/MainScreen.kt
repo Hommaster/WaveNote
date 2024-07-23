@@ -61,11 +61,17 @@ fun MainScreen(
                         scope.launch { drawerState.open() }
                     }
                 )
-                PulsarFab(
-                    onClick = {
+                Box(
+                    modifier = Modifier
+                        .padding(268.dp, 690.dp, 0.dp, 0.dp),
+                ) {
+                    PulsarFab(
+                        onClick = {
 
-                    }
-                )
+                        }
+                    )
+                }
+
             }
         }
     )
