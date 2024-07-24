@@ -2,4 +2,6 @@
     <string name="app_name">WaveNote</string>
     
     <string name="type_note_question">What type of note do you want to leave?</string>
+
+    <string name="type_note_text">Text entry</string>
 </resources>
