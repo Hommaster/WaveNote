@@ -10,7 +10,11 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -19,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wavenote.R
 import com.example.wavenote.helpers.CustomAppBar
+import com.example.wavenote.helpers.NoteDialog
 import com.example.wavenote.helpers.PulsarFab
 import kotlinx.coroutines.launch
 
@@ -37,6 +42,10 @@ fun MainScreen(
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+
+    var dialogCall by rememberSaveable {
+        mutableIntStateOf(0)
+    }
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -67,11 +76,19 @@ fun MainScreen(
                 ) {
                     PulsarFab(
                         onClick = {
-
+                            dialogCall = 1
                         }
                     )
                 }
 
+            }
+            if(dialogCall > 0) {
+                NoteDialog(
+                    navController = navController,
+                    onDismissRequest = {
+                        dialogCall = 0
+                    }
+                )
             }
         }
     )
