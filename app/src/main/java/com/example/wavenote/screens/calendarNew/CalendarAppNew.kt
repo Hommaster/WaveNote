@@ -21,11 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +42,6 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.Month
 import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
@@ -53,7 +54,6 @@ fun PreviewCalendarNewApp(){
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarApp(
@@ -64,6 +64,10 @@ fun CalendarApp(
     val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
 
     val daysOfWeek = remember { daysOfWeek() }
+
+    var monthOfYear = rememberSaveable {
+        mutableStateOf("")
+    }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -78,7 +82,7 @@ fun CalendarApp(
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.very_light_brown))
-    ) {
+    ){
         HorizontalCalendar(
             state = state,
             dayContent = { day ->
@@ -87,24 +91,8 @@ fun CalendarApp(
                 }
             },
             monthHeader = { month ->
-                TopAppBar(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(0.dp, 0.dp, 13.dp, 13.dp))
-                        .background(
-                            color = Color.Gray,
-                            RoundedCornerShape(0.dp, 13.dp, 13.dp, 0.dp)
-                        ),
-                    colors = TopAppBarDefaults.topAppBarColors(colorResource(id = R.color.brown_light)),
-                    title = {
-                        val monthOfYear = month.yearMonth.month
-                        val year = month.yearMonth.year
-                        MonthAndYearTitle(
-                            monthOfYear,
-                            year
-                        )
-                    }
-                )
+                monthOfYear.value = month.yearMonth.month.toString()
+                MonthAndYearTitle(monthOfYear = month.yearMonth.month.toString(), year = month.yearMonth.year.toString())
                 DaysOfWeekTitle(daysOfWeek = daysOfWeek)
             },
         )
@@ -128,6 +116,7 @@ fun Day(
     isSelected: Boolean,
     onClick: (CalendarDay) -> Unit
     ) {
+    val context = LocalContext.current
     Box(
         modifier = Modifier
             .aspectRatio(1f)
@@ -137,6 +126,7 @@ fun Day(
                 enabled = day.position == DayPosition.MonthDate,
                 onClick = {
                     onClick(day)
+                    val dateString = day.date
                 }
             ),
         contentAlignment = Alignment.Center
@@ -162,23 +152,35 @@ fun DaysOfWeekTitle(daysOfWeek: List<DayOfWeek>) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MonthAndYearTitle(
-    monthOfYear: Month,
-    year: Int
+    monthOfYear: String,
+    year: String
 ) {
-    val month = monthOfYear.getDisplayName(TextStyle.FULL_STANDALONE, Locale.getDefault())
-    Row(
+    TopAppBar(
         modifier = Modifier
             .fillMaxWidth()
-    ) {
-        Text(
-            modifier = Modifier
-                .weight(1f),
-            fontSize = 27.sp,
-            textAlign = TextAlign.Center,
-            text = "$month  $year"
-        )
-    }
+            .clip(RoundedCornerShape(0.dp, 0.dp, 13.dp, 13.dp))
+            .background(
+                color = Color.Gray,
+                RoundedCornerShape(0.dp, 13.dp, 13.dp, 0.dp)
+            ),
+        colors = TopAppBarDefaults.topAppBarColors(colorResource(id = R.color.brown_light)),
+        title = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier
+                        .weight(1f),
+                    fontSize = 27.sp,
+                    textAlign = TextAlign.Center,
+                    text = "$monthOfYear  $year"
+                )
+            }
+        }
+    )
 }
