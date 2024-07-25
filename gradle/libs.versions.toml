@@ -1,7 +1,6 @@
 [versions]
 agp = "8.5.1"
 compose = "2.5.0"
-composecalendar = "1.3.0"
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -15,15 +14,23 @@ dagger = "2.48"
 leackcanary = "2.14"
 nav_version = "2.7.7"
 parcelize = "1.6.10"
+room = "2.6.1"
 
 [libraries]
-compose = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" }
-composecalendar = { module = "io.github.boguszpawlowski.composecalendar:composecalendar", version.ref = "composecalendar" }
-kotlinx-datetime = { module = "io.github.boguszpawlowski.composecalendar:kotlinx-datetime", version.ref = "composecalendar" }
-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "nav_version" }
-leackcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leackcanary" }
-dagger = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
-hilt = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "dagger" }
+
+androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ksp = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+compose = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" } #calendar from git
+
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "nav_version" } #navigationCompose
+
+leackcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leackcanary" } #leakcnary for control information
+
+dagger = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" } #dagger
+hilt = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "dagger" } #dagger
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -42,6 +49,6 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-devtoolsksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-jetbrainsKotlinPluginParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" }
+devtoolsksp = { id = "com.google.devtools.ksp", version.ref = "ksp" } #connect ksp
+jetbrainsKotlinPluginParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" } #connect Parcelize for data classes
 

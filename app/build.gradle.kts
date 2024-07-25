@@ -68,11 +68,21 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //dagger
     ksp(libs.dagger)
     ksp(libs.hilt)
-    debugImplementation(libs.leackcanary)
+
+    //navigation
     implementation(libs.navigation.compose)
     implementation(kotlin("script-runtime"))
 
+
+    //calendarCustomFromGit
     implementation(libs.compose)
+
+    //room database
+    implementation(libs.androidx.room)
+    ksp(libs.androidx.room.ksp)
+    implementation(libs.androidx.room.ktx)
 }
