@@ -27,9 +27,9 @@ private constructor(
 
     suspend fun deleteAll() = database.noteDao().deleteAll()
 
-    suspend fun getAllNotesFromACertainLocalDate(calendarDay: LocalDate): Flow<List<NoteData>> = database.noteDao().getAllNotesFromACertainLocalDate(calendarDay)
+    suspend fun getAllNotesFromACertainLocalDate(calendarDay: LocalDate): List<NoteData> = database.noteDao().getAllNotesFromACertainLocalDate(calendarDay)
 
-    suspend fun getAllNotesFromACertainCategory(category: String): Flow<List<NoteData>> = database.noteDao().getAllNotesFromACertainCategory(category)
+    suspend fun getAllNotesFromACertainCategory(category: String): List<NoteData> = database.noteDao().getAllNotesFromACertainCategory(category)
 
     suspend fun deleteAllFromLocalDate(calendarDay: LocalDate) = database.noteDao().deleteAllFromLocalDate(calendarDay)
 
