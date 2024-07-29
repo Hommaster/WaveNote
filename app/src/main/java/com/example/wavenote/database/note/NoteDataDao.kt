@@ -24,10 +24,10 @@ interface NoteDataDao {
     suspend fun deleteAllFromCategory(category: String)
 
     @Query("SELECT * FROM notedata WHERE calendarDay=(:calendarDay)")
-    suspend fun getAllNotesFromACertainLocalDate(calendarDay: LocalDate): Flow<List<NoteData>>
+    suspend fun getAllNotesFromACertainLocalDate(calendarDay: LocalDate): List<NoteData>
 
     @Query("SELECT * FROM notedata WHERE category=(:category)")
-    suspend fun getAllNotesFromACertainCategory(category: String): Flow<List<NoteData>>
+    suspend fun getAllNotesFromACertainCategory(category: String): List<NoteData>
 
     @Update
     suspend fun updateNoteData(note: NoteData)
