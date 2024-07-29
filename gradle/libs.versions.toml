@@ -22,14 +22,14 @@ androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = 
 androidx-room-ksp = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
-compose = { module = "com.kizitonwose.calendar:compose", version = "compose" } #calendar from git
+compose = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" } #calendar from git
 
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "nav_version" } #navigationCompose
 
 leackcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leackcanary" } #leakcnary for control information
 
-dagger = { group = "com.google.dagger", name = "dagger-compiler", version = "dagger" } #dagger
-hilt = { group = "com.google.dagger", name = "hilt-compiler", version = "dagger" } #dagger
+dagger = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" } #dagger
+hilt = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "dagger" } #dagger
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
