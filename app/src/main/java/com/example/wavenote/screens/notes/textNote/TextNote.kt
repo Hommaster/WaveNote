@@ -1,5 +1,7 @@
 package com.example.wavenote.screens.notes.textNote
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,7 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -18,6 +24,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,24 +34,36 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wavenote.R
+import com.example.wavenote.database.note.NoteData
 import com.example.wavenote.screens.notes.helpers.BoxWithAdditionalFunctionality
 import com.example.wavenote.screens.notes.helpers.BoxWithImageScrollToDismiss
 import com.example.wavenote.helpers.SwipeToDismiss
+import com.example.wavenote.helpers.viewmodels.NotesViewModel
+import com.example.wavenote.routes.Routes
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun PreviewTextNote() {
     TextNote(
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        noteViewModel = NotesViewModel()
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextNote(
-    navController: NavHostController
+    navController: NavHostController,
+    noteViewModel: NotesViewModel
 ) {
-    val header = remember {
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val title = remember {
         mutableStateOf("")
     }
     val description = remember {
@@ -87,9 +106,9 @@ fun TextNote(
                 placeholder = {
                     Text(text = "Heading")
                 },
-                value = header.value,
+                value = title.value,
                 onValueChange = { text ->
-                    header.value = text
+                    title.value = text
                 },
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color(0xffeeeeee),
@@ -126,6 +145,25 @@ fun TextNote(
             }
             Row {
                 Text(text = "this need icons place")
+                IconButton(onClick = {
+
+                    val newNoteData = NoteData(
+                        title = title.value,
+                        description = description.value,
+                        calendarDay = LocalDate.now(),
+                        category = "Test"
+                    )
+                    coroutineScope.launch {
+                        noteViewModel.addNote(newNoteData)
+                        navController.popBackStack(Routes.Home.route, false)
+                    }
+                }) {
+                    Icon(
+                        Icons.Default.Add,
+                        "Add"
+                    )
+                }
+
             }
         }
     }
