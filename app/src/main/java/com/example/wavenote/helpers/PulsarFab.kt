@@ -29,20 +29,25 @@ fun PulsarFab(
     onClick: () -> Unit,
 ) {
 
-    MultiplePulsarEffect { modifierEffect ->
-        FloatingActionButton(
-            modifier = modifierEffect,
-            shape = FloatingActionButtonDefaults.largeShape,
-            containerColor = colorResource(id = R.color.orange),
-            onClick = { onClick() },
-        ) {
-            Icon(
-                modifier = Modifier
-                    .size(50.dp),
-                tint = Color.White,
-                imageVector = Icons.Default.Add,
-                contentDescription = ""
-            )
+    Box(
+        modifier = Modifier
+            .padding(268.dp, 690.dp, 0.dp, 0.dp)
+    ) {
+        MultiplePulsarEffect { modifierEffect ->
+            FloatingActionButton(
+                modifier = modifierEffect,
+                shape = FloatingActionButtonDefaults.largeShape,
+                containerColor = colorResource(id = R.color.orange),
+                onClick = { onClick() },
+            ) {
+                Icon(
+                    modifier = Modifier
+                        .size(50.dp),
+                    tint = Color.White,
+                    imageVector = Icons.Default.Add,
+                    contentDescription = ""
+                )
+            }
         }
     }
 }
