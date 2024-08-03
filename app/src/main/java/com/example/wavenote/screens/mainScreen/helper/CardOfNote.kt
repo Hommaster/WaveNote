@@ -14,7 +14,7 @@ fun CardOfNote(
     noteData: NoteData
 ) {
 
-    val limitDescription: Int = 70
+    val limitDescription = 70
     val limitTitle = 15
 
     val description: String = if(noteData.description.codePointCount(0, noteData.description.length) > limitDescription) {
