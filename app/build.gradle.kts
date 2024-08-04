@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.wavenote"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -85,4 +85,7 @@ dependencies {
     implementation(libs.androidx.room)
     ksp(libs.androidx.room.ksp)
     implementation(libs.androidx.room.ktx)
+
+    //Gson converter
+    implementation(libs.gson)
 }

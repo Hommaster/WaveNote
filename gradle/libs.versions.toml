@@ -15,8 +15,12 @@ leackcanary = "2.14"
 nav_version = "2.7.7"
 parcelize = "1.6.10"
 room = "2.6.1"
+#for Gson converter
+gson = "2.10.1"
 
 [libraries]
+
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" } #Gson converter
 
 androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ksp = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -51,4 +55,3 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 devtoolsksp = { id = "com.google.devtools.ksp", version.ref = "ksp" } #connect ksp
 jetbrainsKotlinPluginParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "parcelize" } #connect Parcelize for data classes
-
