@@ -22,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wavenote.R
 import com.example.wavenote.model.NoteType
 import com.example.wavenote.routes.Routes
+import java.time.LocalDate
 
 @Preview
 @Composable
@@ -29,17 +30,26 @@ fun PreviewNoteDialog(){
     val context = LocalContext.current
     NoteDialog(
         navController = rememberNavController(),
+        localeDate = LocalDate.now(),
         onDismissRequest = {
             Toast.makeText(context, "Denied", Toast.LENGTH_SHORT).show()
+        },
+        onRequest = {
+            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
         }
     )
 }
 
 @Composable
 fun NoteDialog(
+    localeDate: LocalDate,
+    onRequest: () -> Unit,
     onDismissRequest: () -> Unit,
     navController: NavHostController
 ) {
+
+    val localeDateString = localeDate.toString()
+
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
             modifier = Modifier
@@ -56,11 +66,12 @@ fun NoteDialog(
                     modifier = Modifier
                         .padding(24.dp)
                 )
-                NoteType.values().forEach { noteType ->
+                NoteType.entries.forEach { noteType ->
                     Text(
                         modifier = Modifier
                             .clickable {
-                                navController.navigate(Routes.TextNote.route)
+                                onRequest()
+                                navController.navigate(Routes.TextNote.route + "/$localeDateString")
                             },
                         text = stringResource(id = noteType.nameNoteType),
                     )
