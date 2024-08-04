@@ -1,7 +1,5 @@
 package com.example.wavenote.screens.notes.textNote
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,22 +41,22 @@ import com.example.wavenote.routes.Routes
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun PreviewTextNote() {
     TextNote(
         navController = rememberNavController(),
-        noteViewModel = NotesViewModel()
+        noteViewModel = NotesViewModel(),
+        localeDateString = "2024-08-16"
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextNote(
     navController: NavHostController,
-    noteViewModel: NotesViewModel
+    noteViewModel: NotesViewModel,
+    localeDateString: String?
 ) {
 
     val coroutineScope = rememberCoroutineScope()
@@ -69,6 +67,9 @@ fun TextNote(
     val description = remember {
         mutableStateOf("")
     }
+
+    val localeDate = LocalDate.parse(localeDateString)
+
     SwipeToDismiss(
         navController
     ) {
@@ -150,7 +151,7 @@ fun TextNote(
                     val newNoteData = NoteData(
                         title = title.value,
                         description = description.value,
-                        calendarDay = LocalDate.now(),
+                        calendarDay = localeDate,
                         category = "Test"
                     )
                     coroutineScope.launch {
