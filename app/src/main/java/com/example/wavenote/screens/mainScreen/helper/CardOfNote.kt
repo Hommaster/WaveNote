@@ -18,13 +18,13 @@ fun CardOfNote(
     val limitTitle = 15
 
     val description: String = if(noteData.description.codePointCount(0, noteData.description.length) > limitDescription) {
-        noteData.description.substring(0, noteData.description.offsetByCodePoints(0, limitDescription))
+        noteData.description.substring(0, noteData.description.offsetByCodePoints(0, limitDescription)) + "...."
     } else {
         noteData.description
     }
 
     val title: String = if(noteData.title.codePointCount(0, noteData.title.length) > limitTitle) {
-        noteData.title.substring(0, noteData.title.offsetByCodePoints(0, limitTitle))
+        noteData.title.substring(0, noteData.title.offsetByCodePoints(0, limitTitle)) + "...."
     } else {
         noteData.title
     }
