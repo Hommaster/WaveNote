@@ -9,9 +9,12 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.wavenote.helpers.viewmodels.NotesViewModel
 import com.example.wavenote.routes.Routes
 import com.example.wavenote.screens.calendarNew.CalendarApp
 import com.example.wavenote.screens.mainScreen.MainScreen
@@ -24,6 +27,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        val noteViewModel = NotesViewModel()
+
         setContent {
             val navController = rememberNavController()
             WaveNoteTheme {
@@ -35,16 +40,31 @@ class MainActivity : ComponentActivity() {
                             content = { paddingValues ->
                                 MainScreen(
                                     navController = navController,
-                                    paddingValues = paddingValues
+                                    paddingValues = paddingValues,
+                                    noteViewModel = noteViewModel
                                 )
                             }
                         )
                     }
                     composable(Routes.Calendar.route){
-                        CalendarApp()
+                        CalendarApp(
+                            navController = navController,
+                            noteViewModel = noteViewModel
+                        )
                     }
-                    composable(Routes.TextNote.route){
-                        TextNote(navController = navController)
+                    composable(
+                        Routes.TextNote.route + "/{locale_date}",
+                        arguments = listOf(
+                            navArgument(name = "locale_date"){
+                                type = NavType.StringType
+                            },
+                        )
+                    ){ navBackStackEntry ->
+                        TextNote(
+                            navController = navController,
+                            noteViewModel = noteViewModel,
+                            localeDateString = navBackStackEntry.arguments?.getString("locale_date")
+                        )
                     }
                 }
             }
