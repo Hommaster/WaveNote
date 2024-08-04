@@ -1,17 +1,24 @@
 package com.example.wavenote.screens.mainScreen
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -22,29 +29,44 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.wavenote.R
+import com.example.wavenote.database.note.NoteData
 import com.example.wavenote.helpers.CustomAppBar
 import com.example.wavenote.helpers.NoteDialog
 import com.example.wavenote.helpers.PulsarFab
+import com.example.wavenote.helpers.viewmodels.NotesViewModel
+import com.example.wavenote.screens.mainScreen.helper.CardOfNote
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 @Preview
 @Composable
 fun PreviewMainScreen(
     
 ) {
-    MainScreen(paddingValues = PaddingValues(), navController = rememberNavController())
+    MainScreen(
+        paddingValues = PaddingValues(),
+        navController = rememberNavController(),
+        noteViewModel = NotesViewModel()
+    )
 }
 
 @Composable
 fun MainScreen(
     paddingValues: PaddingValues,
-    navController: NavHostController
+    navController: NavHostController,
+    noteViewModel: NotesViewModel
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     var dialogCall by rememberSaveable {
-        mutableIntStateOf(0)
+        mutableStateOf(false)
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val notesList : MutableState<List<NoteData>> = rememberSaveable {
+        mutableStateOf(emptyList())
     }
 
     ModalNavigationDrawer(
@@ -70,24 +92,45 @@ fun MainScreen(
                         scope.launch { drawerState.open() }
                     }
                 )
-                Box(
+
+                val state = rememberLazyStaggeredGridState()
+
+                LazyVerticalStaggeredGrid(
+                    columns = StaggeredGridCells.Fixed(2),
                     modifier = Modifier
-                        .padding(268.dp, 690.dp, 0.dp, 0.dp),
-                ) {
-                    PulsarFab(
-                        onClick = {
-                            dialogCall = 1
+                        .padding(15.dp, 100.dp)
+                        .fillMaxSize(),
+                    state = state,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalItemSpacing = 10.dp,
+                    content = {
+
+                        coroutineScope.launch {
+                            noteViewModel.notes.collect{
+                                notesList.value = it
+                            }
                         }
-                    )
-                }
+                        notesList.value.forEach { noteData ->
+                            item {
+                                CardOfNote(noteData = noteData)
+                            }
+                        }
+
+                    }
+                )
+                PulsarFab(
+                    onClick = { dialogCall = true }
+                )
 
             }
-            if(dialogCall > 0) {
+            if(dialogCall) {
                 NoteDialog(
                     navController = navController,
+                    localeDate = LocalDate.now(),
                     onDismissRequest = {
-                        dialogCall = 0
-                    }
+                        dialogCall = false
+                    },
+                    onRequest = { dialogCall = false},
                 )
             }
         }
