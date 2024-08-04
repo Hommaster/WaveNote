@@ -43,8 +43,8 @@ class NotesViewModel : ViewModel() {
         noteRepository.deleteAll()
     }
 
-    suspend fun getAllNotesFromACertainLocalDate(calendarDay: LocalDate) {
-        noteRepository.getAllNotesFromACertainLocalDate(calendarDay)
+    suspend fun getAllNotesFromACertainLocalDate(calendarDay: LocalDate) : List<NoteData> {
+        return noteRepository.getAllNotesFromACertainLocalDate(calendarDay)
     }
 
     suspend fun getAllNotesFromACertainCategory(category: String) {
