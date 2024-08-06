@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.wavenote.database.note.NoteData
+import com.example.wavenote.database.note.NoteDataNavType
 import com.example.wavenote.helpers.viewmodels.NotesViewModel
 import com.example.wavenote.routes.Routes
 import com.example.wavenote.screens.calendarNew.CalendarApp
@@ -22,7 +24,7 @@ import com.example.wavenote.screens.notes.textNote.TextNote
 import com.example.wavenote.ui.theme.WaveNoteTheme
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,17 +55,22 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(
-                        Routes.TextNote.route + "/{locale_date}",
+                        Routes.TextNote.route + "/{locale_date}/{note_data}",
                         arguments = listOf(
                             navArgument(name = "locale_date"){
                                 type = NavType.StringType
                             },
+                            navArgument(name = "note_data"){
+                                type = NavType.StringType
+
+                            }
                         )
                     ){ navBackStackEntry ->
                         TextNote(
                             navController = navController,
                             noteViewModel = noteViewModel,
-                            localeDateString = navBackStackEntry.arguments?.getString("locale_date")
+                            localeDateString = navBackStackEntry.arguments?.getString("locale_date"),
+                            noteData = navBackStackEntry.arguments?.getString("note_data")
                         )
                     }
                 }
