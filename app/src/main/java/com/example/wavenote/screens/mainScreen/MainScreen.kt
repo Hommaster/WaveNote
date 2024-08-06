@@ -1,7 +1,5 @@
 package com.example.wavenote.screens.mainScreen
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -112,7 +110,10 @@ fun MainScreen(
                         }
                         notesList.value.forEach { noteData ->
                             item {
-                                CardOfNote(noteData = noteData)
+                                CardOfNote(
+                                    navController = navController,
+                                    noteData = noteData
+                                )
                             }
                         }
 
