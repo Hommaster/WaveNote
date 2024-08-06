@@ -6,12 +6,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.wavenote.database.note.NoteData
+import com.example.wavenote.routes.Routes
+import java.time.LocalDate
 
 
 @Composable
 fun CardOfNote(
-    noteData: NoteData
+    noteData: NoteData,
+    navController: NavHostController
 ) {
 
     val limitDescription = 70
@@ -32,7 +36,11 @@ fun CardOfNote(
     Card(
         modifier = Modifier
             .width(150.dp),
-        onClick = { /*TODO*/ }
+        onClick = {
+            val localDateString = LocalDate.now().toString()
+            val noteDataFromMainScreen = noteData.id.toString()
+            navController.navigate(Routes.TextNote.route + "/$localDateString/$noteDataFromMainScreen")
+        }
     ) {
         Text(text = title)
         Text(text = description)
