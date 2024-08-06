@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import java.time.LocalDate
+import java.util.UUID
 
 @Dao
 interface NoteDataDao {
@@ -19,6 +20,9 @@ interface NoteDataDao {
 
     @Query("DELETE FRom notedata WHERE calendarDay=(:calendarDay)")
     suspend fun deleteAllFromLocalDate(calendarDay: LocalDate)
+
+    @Query("SELECT * FROM notedata WHERE id=(:id)")
+    suspend fun getCurrentNoteData(id: UUID): NoteData
 
     @Query("DELETE FRom notedata WHERE category=(:category)")
     suspend fun deleteAllFromCategory(category: String)
