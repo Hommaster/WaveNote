@@ -6,6 +6,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinScriptRuntime = "2.0.0"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
@@ -28,6 +29,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 
 compose = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" } #calendar from git
 
+kotlin-script-runtime = { module = "org.jetbrains.kotlin:kotlin-script-runtime", version.ref = "kotlinScriptRuntime" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "nav_version" } #navigationCompose
 
 leackcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leackcanary" } #leakcnary for control information

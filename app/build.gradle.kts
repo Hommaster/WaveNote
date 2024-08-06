@@ -75,7 +75,7 @@ dependencies {
 
     //navigation
     implementation(libs.navigation.compose)
-    implementation("org.jetbrains.kotlin:kotlin-script-runtime:2.0.0")
+    implementation(libs.kotlin.script.runtime)
 
 
     //calendarCustomFromGit
