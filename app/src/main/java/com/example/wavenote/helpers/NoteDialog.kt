@@ -71,7 +71,7 @@ fun NoteDialog(
                         modifier = Modifier
                             .clickable {
                                 onRequest()
-                                navController.navigate(Routes.TextNote.route + "/$localeDateString")
+                                navController.navigate(Routes.TextNote.route + "/$localeDateString/1")
                             },
                         text = stringResource(id = noteType.nameNoteType),
                     )
