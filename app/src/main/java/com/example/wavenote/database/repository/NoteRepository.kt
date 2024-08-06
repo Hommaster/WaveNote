@@ -10,6 +10,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.UUID
 
 class NoteRepository @OptIn(DelicateCoroutinesApi::class)
 private constructor(
@@ -26,6 +27,8 @@ private constructor(
     fun getNotes(): Flow<List<NoteData>> = database.noteDao().getAllNotes()
 
     suspend fun deleteAll() = database.noteDao().deleteAll()
+
+    suspend fun getCurrentNoteData(id: UUID): NoteData = database.noteDao().getCurrentNoteData(id)
 
     suspend fun getAllNotesFromACertainLocalDate(calendarDay: LocalDate): List<NoteData> = database.noteDao().getAllNotesFromACertainLocalDate(calendarDay)
 
