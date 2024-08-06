@@ -1,5 +1,8 @@
 package com.example.wavenote.screens.notes.textNote
 
+import android.net.Uri
+import android.os.Build
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,9 +23,12 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -36,10 +42,13 @@ import com.example.wavenote.database.note.NoteData
 import com.example.wavenote.screens.notes.helpers.BoxWithAdditionalFunctionality
 import com.example.wavenote.screens.notes.helpers.BoxWithImageScrollToDismiss
 import com.example.wavenote.helpers.SwipeToDismiss
+import com.example.wavenote.helpers.viewmodels.CurrentNoteViewModel
 import com.example.wavenote.helpers.viewmodels.NotesViewModel
 import com.example.wavenote.routes.Routes
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.UUID
 
 @Preview
 @Composable
@@ -47,7 +56,8 @@ fun PreviewTextNote() {
     TextNote(
         navController = rememberNavController(),
         noteViewModel = NotesViewModel(),
-        localeDateString = "2024-08-16"
+        localeDateString = "2024-08-16",
+        noteData = null
     )
 }
 
@@ -56,16 +66,38 @@ fun PreviewTextNote() {
 fun TextNote(
     navController: NavHostController,
     noteViewModel: NotesViewModel,
-    localeDateString: String?
+    localeDateString: String?,
+    noteData: String?
 ) {
 
     val coroutineScope = rememberCoroutineScope()
 
+    val note: MutableState<NoteData?> = rememberSaveable {
+        mutableStateOf(null)
+    }
+
+    val currentNoteViewModel = if(noteData != "1") CurrentNoteViewModel(UUID.fromString(noteData)) else null
+
+
     val title = remember {
         mutableStateOf("")
     }
+    LaunchedEffect(key1 = Unit) {
+        coroutineScope.launch {
+            if(currentNoteViewModel != null) {
+                title.value = currentNoteViewModel.note.value!!.title
+            }
+        }
+    }
     val description = remember {
         mutableStateOf("")
+    }
+    LaunchedEffect(key1 = Unit) {
+        coroutineScope.launch {
+            if(currentNoteViewModel != null) {
+                description.value = currentNoteViewModel.note.value!!.description
+            }
+        }
     }
 
     val localeDate = LocalDate.parse(localeDateString)
@@ -147,15 +179,45 @@ fun TextNote(
             Row {
                 Text(text = "this need icons place")
                 IconButton(onClick = {
+                    if(currentNoteViewModel != null) {
+                        coroutineScope.launch {
+                            Log.d("noteViewModelv", "${currentNoteViewModel?.note?.value?.title}")
+                            currentNoteViewModel.updateNote { oldNote ->
+                                oldNote.copy(
+                                    id = currentNoteViewModel.note.value!!.id,
+                                    title = title.value,
+                                    description = description.value,
+                                    calendarDay = currentNoteViewModel.note.value!!.calendarDay,
+                                    dateCreate = currentNoteViewModel.note.value!!.dateCreate,
+                                    fileNameAudio = currentNoteViewModel.note.value!!.fileNameAudio,
+                                    fileNameImage = currentNoteViewModel.note.value!!.fileNameImage,
+                                    category = currentNoteViewModel.note.value!!.category,
+                                    typeNote = currentNoteViewModel.note.value!!.typeNote
+                                )
+                            }
+                        }
 
-                    val newNoteData = NoteData(
-                        title = title.value,
-                        description = description.value,
-                        calendarDay = localeDate,
-                        category = "Test"
-                    )
+                        coroutineScope.launch {
+                            currentNoteViewModel.note.collect{
+                                note.value = it
+                            }
+                        }
+
+                        coroutineScope.launch {
+                            noteViewModel.updateNoteData(note.value!!)
+                        }
+                    } else {
+                        val newNoteData = NoteData(
+                            title = title.value,
+                            description = description.value,
+                            calendarDay = localeDate,
+                            category = "Test"
+                        )
+                        coroutineScope.launch {
+                            noteViewModel.addNote(newNoteData)
+                        }
+                    }
                     coroutineScope.launch {
-                        noteViewModel.addNote(newNoteData)
                         navController.popBackStack(Routes.Home.route, false)
                     }
                 }) {
