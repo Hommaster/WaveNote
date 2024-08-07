@@ -1,7 +1,5 @@
 package com.example.wavenote.screens.notes.textNote
 
-import android.net.Uri
-import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -33,10 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.wavenote.R
 import com.example.wavenote.database.note.NoteData
 import com.example.wavenote.screens.notes.helpers.BoxWithAdditionalFunctionality
@@ -45,21 +41,10 @@ import com.example.wavenote.helpers.SwipeToDismiss
 import com.example.wavenote.helpers.viewmodels.CurrentNoteViewModel
 import com.example.wavenote.helpers.viewmodels.NotesViewModel
 import com.example.wavenote.routes.Routes
-import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.UUID
-
-@Preview
-@Composable
-fun PreviewTextNote() {
-    TextNote(
-        navController = rememberNavController(),
-        noteViewModel = NotesViewModel(),
-        localeDateString = "2024-08-16",
-        noteData = null
-    )
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,29 +67,25 @@ fun TextNote(
     val title = remember {
         mutableStateOf("")
     }
-    LaunchedEffect(key1 = Unit) {
-        coroutineScope.launch {
-            if(currentNoteViewModel != null) {
-                title.value = currentNoteViewModel.note.value!!.title
-            }
-        }
-    }
     val description = remember {
         mutableStateOf("")
-    }
-    LaunchedEffect(key1 = Unit) {
-        coroutineScope.launch {
-            if(currentNoteViewModel != null) {
-                description.value = currentNoteViewModel.note.value!!.description
-            }
-        }
     }
 
     val localeDate = LocalDate.parse(localeDateString)
 
+
     SwipeToDismiss(
         navController
     ) {
+        LaunchedEffect(key1 = Unit) {
+            delay(70)
+            Log.d("currentNoteViewModel", "${currentNoteViewModel?.note?.value?.title}")
+            note.value = currentNoteViewModel?.note?.value
+            coroutineScope.launch {
+                title.value = note.value?.title ?: ""
+                description.value = note.value?.description ?: ""
+            }
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -196,13 +177,9 @@ fun TextNote(
                                 )
                             }
                         }
-
                         coroutineScope.launch {
-                            currentNoteViewModel.note.collect{
-                                note.value = it
-                            }
+                            note.value = currentNoteViewModel.note.value
                         }
-
                         coroutineScope.launch {
                             noteViewModel.updateNoteData(note.value!!)
                         }
