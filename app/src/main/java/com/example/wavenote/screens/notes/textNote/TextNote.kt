@@ -1,6 +1,5 @@
 package com.example.wavenote.screens.notes.textNote
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -79,7 +78,6 @@ fun TextNote(
     ) {
         LaunchedEffect(key1 = Unit) {
             delay(70)
-            Log.d("currentNoteViewModel", "${currentNoteViewModel?.note?.value?.title}")
             note.value = currentNoteViewModel?.note?.value
             coroutineScope.launch {
                 title.value = note.value?.title ?: ""
@@ -162,7 +160,6 @@ fun TextNote(
                 IconButton(onClick = {
                     if(currentNoteViewModel != null) {
                         coroutineScope.launch {
-                            Log.d("noteViewModelv", "${currentNoteViewModel?.note?.value?.title}")
                             currentNoteViewModel.updateNote { oldNote ->
                                 oldNote.copy(
                                     id = currentNoteViewModel.note.value!!.id,
