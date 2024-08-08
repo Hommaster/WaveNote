@@ -4,4 +4,6 @@
     <string name="type_note_question">What type of note do you want to leave?</string>
 
     <string name="type_note_text">Text entry</string>
+
+    <string name="drawer_item_cat">Categories</string>
 </resources>
